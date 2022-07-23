@@ -22,3 +22,6 @@ env_variables:
   DB_PASSWORD: pamjaya123
   PROJECT_ID: erudite-bonbon-352111
   INSTANCE_NAME: pamjaya-db
+  TWILIO_ACCOUNT_SID:
+  TWILIO_AUTH_TOKEN:
+  VERIFICATION_SID:

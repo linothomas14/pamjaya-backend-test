@@ -10,5 +10,5 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 jwt = JWTManager(app)
 
-from app.model import keluhan, pelanggan, admin
-from app.routes import pelanggan, keluhan, auth
+from app.model import keluhan, admin, user
+from app.routes import keluhan, auth, user

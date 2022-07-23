@@ -1,12 +1,12 @@
 from flask_jwt_extended import *
 from flask import request
-from app.controller.PelangganController import transform_pelanggan
+from app.controller import UserController
 from app.model.keluhan import Keluhan
 from app import response, db
 from datetime import datetime
 import uuid
 
-from app.model.pelanggan import Pelanggan
+from app.model.user import User
 
 # def testOptional():
 #     try:
@@ -51,18 +51,18 @@ def singleTransform(keluhan):
         'id': keluhan.id,
         'jenis_keluhan': keluhan.jenis_keluhan,
         'keluhan': keluhan.keluhan,
-        'id_pelanggan': keluhan.id_pelanggan,
+        'id_user': keluhan.id_user,
         'kelurahan': keluhan.kelurahan,
         'kecamatan': keluhan.kecamatan,
         'kota_madya': keluhan.kota_madya,
-        'kode_pos': keluhan.kode_pos,
         'status': keluhan.status,
+        'id_user' : keluhan.id_user,
         'created_at': keluhan.created_at,
         'updated_at': keluhan.updated_at,
     }
     return data
 
-
+@jwt_required()
 def show(id):
     try:
         keluhan = Keluhan.query.filter_by(id=id).first()
@@ -82,34 +82,34 @@ def addKeluhan():
         kelurahan = request.json['kelurahan']
         kecamatan = request.json['kecamatan']
         kota_madya = request.json['kota_madya']
-        kode_pos = request.json['kode_pos']
-
+        # keterangan = request.json['keterangan']
+        # noHp = request.json['no_hp']
         user_identity = get_jwt_identity()
-        print("HELLOOOOOOO")
-        idPelanggan = user_identity['id']
-        print("INI ADALAH ID PELANGGAN"+idPelanggan)
-        pelanggan = Pelanggan.query.filter_by(id_pelanggan=idPelanggan).first()
-        if not pelanggan:
-            return response.notFound([], 'Pelanggan not found')
-        id = uuid.uuid4()
 
-        keluhan = Keluhan(id=id, keluhan=keluhan,
+        noHp = user_identity['noHp']
+        user = User.query.filter_by(no_hp=noHp).first()
+        if not user:
+            return response.notFound('', 'user not found')
+
+        idUser = user.id
+        # id = uuid.uuid4()
+        keluhan = Keluhan(keluhan=keluhan,
                           jenis_keluhan=jenisKeluhan,
-                          id_pelanggan=idPelanggan,
+                          id_user=idUser,
                           kelurahan=kelurahan,
                           kecamatan=kecamatan,
                           kota_madya=kota_madya,
-                          kode_pos=kode_pos)
+                          )
 
         db.session.add(keluhan)
         db.session.commit()
-        return response.addData('', 'Keluhan id ' + str(id) + 'added')
+        return response.addData('', 'Keluhan '  + ' added')
 
     except Exception as e:
         print(e)
         return response.badRequest('error', 'Bad request')
 
-
+# @jwt_required()
 def updateKeluhan(id):
     try:
         keluhan = Keluhan.query.filter_by(id=id).first()
@@ -128,7 +128,7 @@ def updateKeluhan(id):
         print(e)
         return response.badRequest('error', 'Bad request')
 
-
+# @jwt_required()
 def deleteKeluhan(id):
     try:
         keluhan = Keluhan.query.filter_by(id=id).first()

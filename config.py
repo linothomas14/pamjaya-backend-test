@@ -19,7 +19,7 @@ class Config(object):
         '''
         SQLALCHEMY_DATABASE_URI = f"mysql+mysqldb://root:{PASSWORD}@{HOST}/{DATABASE}?unix_socket=/cloudsql/{CONNECTION_STRING}"
 
-        # SQLALCHEMY_DATABASE_URI= f"mysql+mysqldb://root:{PASSWORD}@/{DATABASE}?unix_socket=/cloudsql/{PROJECT_ID}:us-central1:{INSTANCE_NAME}"
+        
 
     else:
         SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + USERNAME + \
