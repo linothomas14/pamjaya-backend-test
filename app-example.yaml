@@ -1,0 +1,23 @@
+runtime: python
+
+runtime_config:
+    python_version: 3.7
+env: flex
+entrypoint: gunicorn -b :$PORT main:app --timeout 300
+manual_scaling:
+  instances: 1
+beta_settings:
+  cloud_sql_instances: 
+resources:
+    cpu: 2
+    memory_gb: 4
+    disk_size_gb: 20
+
+env_variables:
+ ENV: PROD
+ FLASK_APP: main.py
+ DB_HOST: 
+ DB_DATABASE: 
+ DB_USERNAME: 
+ DB_PASSWORD: 
+ CONNECTION_STRING: 
